@@ -10,7 +10,7 @@ import random
 
 
 # token = input('Token: ')
-token = 'vk1.a.Bz3yarzfTuSDvujthzJERtOHLLPLx3kVU8C574BBVCvfcr28AKNqmXlzaXA0jCrzsfbwo5sQSwXSpqwJoTXurQWBjrA7TqPTNuMwekh8wXY6hNQXPXE3t9Wgd6LrIXcx_gwoD5gS_XnDHAXwwSG6yZdeXsqrY_pdsl0wJaQW2KoOrrV3EgcvJITxT_I7vJz-kOzrYZ-4KhnC2rmCGd3WPQ'
+token = ''
 
 
 # Класс для работы с API ВК
