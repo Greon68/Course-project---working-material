@@ -28,35 +28,6 @@ class VkUser :
         return res
         # pprint(res)
 
-    def users_search_2(self,hometown=None,age_from=None,age_to=None, sex=None):
-        url =self.url + 'users.search'
-        users_params = {
-            'count':10,
-            'hometown':hometown ,
-            'sex': sex ,
-            'sort':0,
-            'age_from':age_from ,
-            'age_to': age_to,
-
-            'fields': 'country,city, sex , bdate , domain '
-            }
-        res = requests.get(url, params={**self.params, **users_params}).json()
-        # Избавимся от вложенности , создадим список с параметрами пользователей :
-        users_info_list_all = res['response']['items']
-        # pprint(users_info_list_all)
-        # Отфильтруем лишние города и закрытые профили :
-        users_info_list = []
-        for user in users_info_list_all :
-            if 'city' in user and user['city']['title'] == hometown and user['is_closed'] is False :
-                users_info_list.append(user)
-        # pprint(users_info_list)
-        # # Получим список с id пользователей :
-        users_id_list = []
-        for user in users_info_list:
-            user_id = user['id']
-            users_id_list.append(user_id )
-        # print (len(users_id_list),users_id_list)
-        return [users_info_list, users_id_list]
 
     def users_search_3(self,hometown=None,age_from=None,age_to=None, sex=None):
         url =self.url + 'users.search'
@@ -153,57 +124,9 @@ class VkUser :
             return best_photos_list_url
 
 
-    def get_companions_all (self,hometown=None,age_from=None,age_to=None, sex=None):
-        ''' Функция получает на вход параметры поиска пользователя.
-        Возвращает список со словарями данных найдённых пользователей '''
-        # Посмотрим  , сколько всего анкет мы имеем для обработки (для контроля) :
-        users_id_list = self.users_search_2(hometown, age_from, age_to, sex)[1]
-        print(f' Найдено {len(users_id_list)} анкет со следующими id : {users_id_list}')
-        # Получаем расширенную информацию о пользователях :
-        users_info_list= self.users_search_2(hometown,age_from,age_to, sex)[0]
-        # print(len(users_info_list))
-        # pprint(users_info_list)
-        #
-        # Формируем пустой список для вывода финишной информации :
-        user_list = []
 
-        # Работаем с каждой анкетой из общего списка:
-        for user in tqdm(users_info_list):
-            user_dict = {}
-            user_id = user['id']
-            # Получаем 3 фотографии нужного пользователя
-            photos_url_list = vk_client.get_best_photos_2(user_id=user_id)
-            # pprint (photos_url_list)
-            # Наполняем текущий словарь требуемыми значениями .
-            if photos_url_list is not None  :
-                user_dict['bdate'] = user['bdate']
-                user_dict['city'] = user['city']['title']
-                user_dict['domain'] = user['domain']
-                user_dict['photos_url_list'] = photos_url_list
-                user_dict['first_name'] = user['first_name']
-                user_dict['last_name'] = user['last_name']
-                user_dict['sex'] = user['sex']
-                user_dict['id'] = user['id']
-                user_list.append(user_dict)
-        return user_list
 
-    def user_profile(self):
-        my_list = (input('Введите список параметров -')).split(",")
-        # print (my_list)
-        start = 'да'
-        while len(my_list):
-            if start.lower() == 'да':
-                el = my_list.pop(0)
-                print(el)
-                # print(a_list)
-                start = input('Для просмотра следующего элемента списка напишите "да" - ')
-            else:
-                print("Вы вышли из режима просмотра анкет")
-                break
-        else:
-            print()
-            print('Список обработанных анкет законился.\n'
-                  'Введите новые параметры поиска')
+
 
     def get_companion (self,hometown=None,age_from=None,age_to=None, sex=None):
         '''Функция получает на вход параметры поиска ,
